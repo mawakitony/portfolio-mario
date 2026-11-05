@@ -6,13 +6,11 @@ import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  attachEmbedToPublication,
   discardEmptyPublication,
   finalizePublication,
   preparePublication,
 } from "@/lib/admin/actions/publications";
 import { registerUploadedMedia } from "@/lib/admin/actions/media";
-import { parseEmbed } from "@/lib/admin/embeds";
 import { resolveMediaFile } from "@/lib/admin/media-rules";
 import { uploadToStorage } from "@/lib/admin/upload-client";
 
@@ -21,7 +19,6 @@ export function PublishForm() {
   const [type, setType] = useState<"image" | "video">("image");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [link, setLink] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [progress, setProgress] = useState<number | null>(null);
@@ -59,16 +56,8 @@ export function PublishForm() {
       setError("Choisis une image ou une affiche.");
       return;
     }
-    if (type === "video" && !file && !link.trim()) {
-      setError("Ajoute une vidéo ou un lien YouTube ou Vimeo.");
-      return;
-    }
-    if (type === "video" && file && link.trim()) {
-      setError("Choisis un fichier ou un lien, pas les deux.");
-      return;
-    }
-    if (type === "video" && !file && !parseEmbed(link)) {
-      setError("Le lien doit être une adresse YouTube ou Vimeo.");
+    if (type === "video" && !file) {
+      setError("Choisis une vidéo MP4 ou WebM.");
       return;
     }
 
@@ -128,14 +117,6 @@ export function PublishForm() {
         setError(`${caught instanceof Error ? caught.message : "L'envoi a échoué."} Rien n'a été publié.`);
         return;
       }
-    } else {
-      const attached = await attachEmbedToPublication({ projectId: prepared.id, url: link });
-      if (!attached.ok) {
-        await discardEmptyPublication(prepared.id);
-        setBusy(false);
-        setError(`${attached.message ?? "Le lien n'a pas été enregistré."} Rien n'a été publié.`);
-        return;
-      }
     }
 
     const done = await finalizePublication({ id: prepared.id, intent });
@@ -150,8 +131,6 @@ export function PublishForm() {
     router.refresh();
   }
 
-  const youtube = parseEmbed(link);
-  const remotePreview = youtube?.provider === "youtube" ? `https://i.ytimg.com/vi/${youtube.id}/hqdefault.jpg` : null;
   const fileIsVideo = Boolean(file && /\.(mp4|webm)$/i.test(file.name));
 
   return (
@@ -201,20 +180,9 @@ export function PublishForm() {
           </Button>
           <p className="text-sm">{file ? file.name : "Aucun fichier choisi"}</p>
         </div>
-        {type === "video" ? (
-          <label className="grid gap-2 text-sm font-medium">
-            Ou un lien YouTube / Vimeo
-            <input
-              value={link}
-              onChange={(event) => setLink(event.target.value)}
-              placeholder="https://"
-              className="rounded-lg border border-input bg-transparent px-3 py-3 font-normal"
-            />
-          </label>
-        ) : null}
       </div>
 
-      {preview || remotePreview ? (
+      {preview ? (
         <div className="overflow-hidden rounded-2xl border border-border bg-card">
           <p className="px-4 py-3 text-xs font-medium tracking-[0.16em] text-muted-foreground uppercase">Aperçu</p>
           {fileIsVideo && preview ? (
@@ -222,7 +190,7 @@ export function PublishForm() {
           ) : (
             <div className="relative aspect-[16/10] bg-muted">
               <Image
-                src={preview || remotePreview || ""}
+                src={preview}
                 alt=""
                 fill
                 sizes="768px"
