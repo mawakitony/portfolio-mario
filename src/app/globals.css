@@ -225,6 +225,7 @@
   min-width: 3px;
   height: 0.72em;
   background: #2078CF;
+  box-shadow: 0 0 10px #2078CF;
   opacity: 0;
 }
 
@@ -239,14 +240,16 @@
     animation: page-wash 0.8s ease forwards;
   }
 
-  .js .anim-pending[data-anim="pageLoad"] {
+  .js .anim-pending[data-anim="pageLoad"],
+  .js .anim-pending[data-anim="pageLoadScroll"] {
     opacity: 0;
     transform: translate3d(0, -16px, 0);
   }
 
-  .js .anim-pending[data-anim="popUp"] {
+  .js .anim-pending[data-anim="popUp"],
+  .js .anim-pending[data-anim="pageLoadPopup"] {
     opacity: 0;
-    transform: scale(0.85);
+    transform: scale(0.86);
   }
 
   .js .anim-pending[data-anim="zoomOut"] {
@@ -266,7 +269,7 @@
 
   .js .anim-pending[data-anim="staggerScale"] {
     opacity: 0;
-    transform: scale(0.9);
+    transform: translate3d(0, 14px, 0) scale(0.9);
   }
 
   .js .typewriter-char {
@@ -276,8 +279,12 @@
   }
 
   .js .typewriter-caret::after {
-    animation: caret-in 1ms linear forwards, caret-out 1ms linear forwards;
-    animation-delay: var(--caret-on, 0ms), var(--caret-off, 0ms);
+    animation: caret-tick var(--caret-span, 180ms) steps(2, end) 1 forwards;
+    animation-delay: var(--caret-on, 0ms);
+  }
+
+  .js .typewriter-finish {
+    animation: type-finish 0.9s ease 3.45s both;
   }
 
   .js .typewriter-caret[data-blink="true"]::after {
@@ -312,6 +319,14 @@
 
   .video-fade {
     animation: video-fade 0.45s ease both;
+  }
+
+  .lightbox-in {
+    animation: lightbox-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .lightbox-frame {
+    animation: lightbox-frame 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
   .cover-live {
@@ -359,6 +374,27 @@
 
 @keyframes type-on {
   to { color: var(--type-color, #fff); }
+}
+
+@keyframes caret-tick {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes type-finish {
+  0% { text-shadow: 0 0 0 transparent; }
+  45% { text-shadow: 0 0 26px rgba(32, 120, 207, 0.55); }
+  100% { text-shadow: 0 0 12px rgba(32, 120, 207, 0.2); }
+}
+
+@keyframes lightbox-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes lightbox-frame {
+  from { opacity: 0.72; transform: scale(1.06); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 @keyframes caret-in {

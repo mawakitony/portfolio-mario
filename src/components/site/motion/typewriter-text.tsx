@@ -70,6 +70,7 @@ function Caret({ caret }: { caret: CaretPlan }) {
         {
           "--caret-on": `${caret.on}ms`,
           "--caret-off": `${caret.off}ms`,
+          "--caret-span": `${Math.max(90, caret.off - caret.on)}ms`,
           "--caret-hold": `${caret.hold}ms`,
         } as CSSProperties
       }

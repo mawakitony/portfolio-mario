@@ -61,7 +61,7 @@ export function ServiceBoard({ services }: { services: ServiceItem[] }) {
         const wide = index === 0 || index === 3 || index === 6;
         return (
           <li key={service.key} id={service.slug} className={`scroll-mt-24 ${wide ? "md:col-span-3" : "md:col-span-2"}`}>
-            <RevealOnScroll variant="staggerScale" delay={index * 100}>
+            <RevealOnScroll variant="staggerDropDown" delay={index * 100}>
               <article className="group flex h-full min-h-52 flex-col justify-between gap-8 border border-[#2078CF]/25 bg-gradient-to-br from-[#011F65] to-[#020C47] p-6 transition duration-300 hover:border-[#2078CF] motion-safe:hover:-translate-y-1 motion-safe:hover:shadow-[0_16px_36px_rgba(32,120,207,0.24)]">
                 <span className="flex items-center justify-between">
                   <span className="text-xs font-medium text-[#2078CF]">{String(index + 1).padStart(2, "0")}</span>

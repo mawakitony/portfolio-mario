@@ -91,19 +91,33 @@ export const motionPresets = {
   },
 } satisfies Record<string, MotionConfig>;
 
-export type AnimationVariant = "pageLoad" | "popUp" | "zoomOut" | "fadeScale" | "staggerDropDown" | "staggerScale";
+export const motionEase = [0.22, 1, 0.36, 1] as const;
 
-export const animationVariants: Record<
-  AnimationVariant,
-  { hidden: { opacity: number; y?: number; scale?: number }; show: { opacity: number; y: number; scale: number }; duration: number; bounce?: boolean }
-> = {
-  pageLoad: {
+export type AnimationVariant =
+  | "pageLoadScroll"
+  | "pageLoadPopup"
+  | "zoomOut"
+  | "fadeScale"
+  | "staggerDropDown"
+  | "staggerScale"
+  | "pageLoad"
+  | "popUp";
+
+type AnimationPreset = {
+  hidden: { opacity: number; y?: number; scale?: number };
+  show: { opacity: number; y: number; scale: number };
+  duration: number;
+  bounce?: boolean;
+};
+
+const animationPresets = {
+  pageLoadScroll: {
     hidden: { opacity: 0, y: -16 },
     show: { opacity: 1, y: 0, scale: 1 },
-    duration: 0.7,
+    duration: 0.75,
   },
-  popUp: {
-    hidden: { opacity: 0, scale: 0.85 },
+  pageLoadPopup: {
+    hidden: { opacity: 0, scale: 0.86 },
     show: { opacity: 1, y: 0, scale: 1 },
     duration: 0.62,
     bounce: true,
@@ -111,24 +125,30 @@ export const animationVariants: Record<
   zoomOut: {
     hidden: { opacity: 0.7, scale: 1.12 },
     show: { opacity: 1, y: 0, scale: 1 },
-    duration: 1,
+    duration: 0.9,
   },
   fadeScale: {
     hidden: { opacity: 0, y: 16, scale: 0.96 },
     show: { opacity: 1, y: 0, scale: 1 },
-    duration: 0.65,
+    duration: 0.68,
   },
   staggerDropDown: {
     hidden: { opacity: 0, y: -20 },
     show: { opacity: 1, y: 0, scale: 1 },
-    duration: 0.55,
+    duration: 0.58,
   },
   staggerScale: {
-    hidden: { opacity: 0, scale: 0.9 },
+    hidden: { opacity: 0, y: 14, scale: 0.9 },
     show: { opacity: 1, y: 0, scale: 1 },
-    duration: 0.6,
+    duration: 0.62,
   },
-};
+} satisfies Record<string, AnimationPreset>;
+
+export function animationPreset(variant: AnimationVariant): AnimationPreset {
+  if (variant === "pageLoad") return animationPresets.pageLoadScroll;
+  if (variant === "popUp") return animationPresets.pageLoadPopup;
+  return animationPresets[variant];
+}
 
 export function resolveMotion(config: MotionConfig) {
   const fade = config.intensity >= 1 ? 0 : 1 - config.intensity;

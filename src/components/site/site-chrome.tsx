@@ -30,7 +30,7 @@ export function SiteChrome() {
       {showTop ? (
         <SectionLink
           id="accueil"
-          className="fixed right-4 bottom-4 z-40 grid size-11 place-items-center rounded-full bg-[#2078CF] text-white shadow-lg transition-transform duration-300 motion-safe:hover:-translate-y-0.5 motion-safe:hover:scale-105 md:right-6 md:bottom-6"
+          className="fixed right-4 bottom-4 z-40 grid size-11 place-items-center rounded-full bg-[#2078CF] text-white shadow-[0_0_18px_rgba(32,120,207,0.35)] transition duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white motion-safe:hover:-translate-y-1 motion-safe:hover:shadow-[0_0_24px_rgba(32,120,207,0.55)] md:right-6 md:bottom-6"
         >
           <ArrowUp className="size-5" aria-hidden />
           <span className="sr-only">Retour en haut</span>

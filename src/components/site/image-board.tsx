@@ -150,7 +150,7 @@ export function ImageBoard({
       {open?.src && typeof document !== "undefined"
         ? createPortal(
             <div
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 md:p-8"
+              className="lightbox-in fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 md:p-8"
               onClick={() => setOpenIndex(null)}
             >
               <div
@@ -189,7 +189,7 @@ export function ImageBoard({
                   </button>
                 ) : null}
                 {/* eslint-disable-next-line @next/next/no-img-element -- the file's own pixels set the popup ratio */}
-                <img src={open.src} alt={open.alt} className="max-h-[78vh] max-w-[92vw] object-contain" />
+                <img src={open.src} alt={open.alt} className="lightbox-frame max-h-[78vh] max-w-[92vw] object-contain" />
                 <div className="mt-4 flex w-full max-w-3xl flex-wrap items-end justify-between gap-4 text-white">
                   <div>
                     <p className="text-lg font-semibold">{open.title}</p>

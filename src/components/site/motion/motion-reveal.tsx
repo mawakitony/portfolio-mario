@@ -2,7 +2,7 @@
 
 import { motion, useInView, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { animationVariants, type AnimationVariant } from "@/components/site/motion/config";
+import { animationPreset, motionEase, type AnimationVariant } from "@/components/site/motion/config";
 import { cn } from "@/lib/utils";
 
 const tags = {
@@ -17,14 +17,18 @@ export function MotionReveal({
   className,
   variant = "fadeScale",
   delay = 0,
+  duration,
   onScroll = true,
+  soft = false,
   as = "div",
 }: {
   children?: ReactNode;
   className?: string;
   variant?: AnimationVariant;
   delay?: number;
+  duration?: number;
   onScroll?: boolean;
+  soft?: boolean;
   as?: keyof typeof tags;
 }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -55,11 +59,12 @@ export function MotionReveal({
     );
   }
 
-  const preset = animationVariants[variant];
+  const preset = animationPreset(variant);
   const mobile = window.matchMedia("(max-width: 767px)").matches;
   const hidden = soften(preset.hidden, mobile);
   const Tag = tags[as];
   const visible = !onScroll || inView;
+  const time = duration ?? preset.duration;
 
   return (
     <Tag
@@ -68,9 +73,9 @@ export function MotionReveal({
       initial={hidden}
       animate={visible ? preset.show : hidden}
       transition={
-        preset.bounce
-          ? { type: "spring", duration: preset.duration, bounce: 0.32, delay }
-          : { duration: preset.duration, delay, ease: [0.22, 1, 0.36, 1] }
+        preset.bounce && !soft
+          ? { type: "spring", duration: time, bounce: 0.16, delay }
+          : { duration: time, delay, ease: motionEase }
       }
     >
       {children}

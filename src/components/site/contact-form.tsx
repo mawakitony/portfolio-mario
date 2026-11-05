@@ -46,7 +46,7 @@ export function ContactForm() {
           required
           rows={6}
           maxLength={5000}
-          className="rounded-lg border border-input bg-transparent px-3 py-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+          className="rounded-lg border border-input bg-transparent px-3 py-3 text-sm outline-none transition-colors focus-visible:border-[#2078CF] focus-visible:ring-3 focus-visible:ring-[#2078CF]/40"
         />
       </div>
       </MotionReveal>
@@ -91,7 +91,7 @@ function Field({
         autoComplete={autoComplete}
         required={required}
         maxLength={maxLength}
-        className="h-11 rounded-lg border border-input bg-transparent px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+        className="h-11 rounded-lg border border-input bg-transparent px-3 text-sm outline-none transition-colors focus-visible:border-[#2078CF] focus-visible:ring-3 focus-visible:ring-[#2078CF]/40"
       />
     </div>
   );
